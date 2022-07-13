@@ -65,7 +65,7 @@ export default function parse(template) {
       attrsStr = content.slice(firstSpaceIdx + 1);
     }
     // attrs属性组 [id="app"]
-    const attrs = attrsStr.split(" ") || [];
+    const attrs =attrsStr? attrsStr.split(" ") : [];
     // 解析attrs数组生成map对象
     const attrMap = parseAttrs(attrs);
     // 生成ast对象
@@ -150,7 +150,7 @@ function parseAttrs(attrs) {
   for (let i = 0; i < attrs.length; i++) {
     const attr = attrs[i];
     const [attrName, attrValue] = attr.split("=");
-    attrMap[attrName] = attrValue;
+    attrMap[attrName] = attrValue.replace(/"/g, '')
   }
   return attrMap;
 }

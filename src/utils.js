@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\utils.js
  * @Date: 2022-07-05 19:56:04
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-10 16:27:47
+ * @LastEditTime: 2022-07-13 19:14:10
  * @author: Lin_kangjing
  */
 /**
@@ -33,4 +33,13 @@ export function proxy(target, sourceKey, key) {
 export function isUnaryTag(tagName){
   const unaryTag = ['input','image']
   return unaryTag.includes(tagName)
+}
+/**是否为保留节点
+ * @param {*} tagName
+ * @return {*}
+ * @author: Lin_kangjing
+ */
+export function isReserveTag(tagName){
+  const reserveTag  = ['div', 'h3', 'span', 'input', 'select', 'option', 'p', 'button', 'template']
+  return reserveTag.includes(tagName)
 }

@@ -3,10 +3,11 @@
  * @FilePath: \lvue\src\compliler\index.js
  * @Date: 2022-07-09 17:05:37
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-10 16:52:52
+ * @LastEditTime: 2022-07-13 19:23:17
  * @author: Lin_kangjing
  */
 import complileToFunction from './complileToFunction.js'
+import mountComponent from './mountComponent.js'
 /**编译器
  * @param {*} vm
  * @return {*}
@@ -28,8 +29,8 @@ export default function mount (vm) {
     const render = complileToFunction(template)
     // 将渲染函数挂载到$options上
     vm.$options.render = render
-    console.log(vm.$options.render)
-
   }
+  // 挂载组件
+  mountComponent(vm)
 }
 

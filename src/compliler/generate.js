@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\compliler\generate.js
  * @Date: 2022-07-10 16:29:27
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-10 16:55:06
+ * @LastEditTime: 2022-07-11 20:06:15
  * @author: Lin_kangjing
  */
 /**从ast生成函数
@@ -15,7 +15,7 @@ export default function generate(ast) {
   // 字符串形式的渲染函数
   const renderStr = genElement(ast);
   // with为渲染函数扩展作用域
-  return new Function(`with(this){return${renderStr}}`);
+  return new Function(`with(this){return ${renderStr}}`);
 }
 /**解析ast生成渲染函数的字符串
  * @param {*} ast
