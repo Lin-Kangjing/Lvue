@@ -3,9 +3,32 @@
  * @FilePath: \lvue\src\dep.js
  * @Date: 2022-07-09 10:25:25
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-09 13:42:17
+ * @LastEditTime: 2022-07-17 01:50:01
  * @author: Lin_kangjing
  */
+// 存储所有的Dep.target
+// 组件会产生一个渲染watcher,在渲染的过程中如果处理到用户watcher，如：
+// computed计算属性，这时候会执行evalute =》get
+// 假如直接复制Dep.target,那Dep.target的上一个值(渲染watcher就会丢失)
+//造成computed计算属性之后的渲染忍得响应式数据无法完成依赖收集
+const targetStack = []
+/**备份本次传递进来的watcher，并将其复制给Dep.target
+ * @param {*} target
+ * @return {*}
+ * @author: Lin_kangjing
+ */
+export function pushTarget(target){
+  targetStack.push(target)
+  Dep.target  = target
+}
+/**将 Dep.target 重置为上一个 Watcher 或者 null
+ * @return {*}
+ * @author: Lin_kangjing
+ */
+export function popTarget(){
+  targetStack.pop()
+  Dep.target  = targetStack[targetStack.length - 1]
+}
 /**vue1 中的key和dep是一一对应关系，举例说明:
  * new Vue({
  *  data(){

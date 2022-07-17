@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\defineReactive.js
  * @Date: 2022-07-06 19:38:10
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-09 20:15:17
+ * @LastEditTime: 2022-07-16 18:58:38
  * @author: Lin_kangjing
  */
 import Dep from "./dep.js";
@@ -30,11 +30,11 @@ export default function defineReactive(obj, key, val) {
           childOb.dep.depend();
         }
       }
-      console.log(`getter:key=${key}`);
+      // console.log(`getter:key=${key}`);
       return val;
     },
     set(newV) {
-      console.log(`setter:${key}=${newV}`);
+      // console.log(`setter:${key}=${newV}`);
       if (newV === val) return;
       val = newV;
       // 对新值进行响应式处理

@@ -3,7 +3,7 @@
  * @FilePath: \lvue\index.html
  * @Date: 2022-07-05 19:39:42
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-09 21:40:53
+ * @LastEditTime: 2022-07-17 02:42:31
  * @author: Lin_kangjing
 -->
 <!DOCTYPE html>
@@ -18,25 +18,34 @@
 
 <body>
   <div id="app">
-    <h2>数据响应式更新 原理</h2>
-    <div>{{ key }}</div>
-    <div>{{ obj }}</div>
+    <!-- <h2>数据响应式更新 原理</h2>
+    <div>{{ obj }}  </div>
     <h2>数据（数组）响应式更新 原理</h2>
     <div>{{ arr }}</div>
-    <h2>computed</h2>
-    <div>
+    
+    <button v-on:click="handleArr">push</button>
+    <button v-on:click="handleArrReverse">reverse</button></button>
+    <h2>computed</h2> -->
+    <!-- <div>
       {{counter}}
-    </div>
+    </div> -->
     <div>
       {{doubleCounter}}
     </div>
-    <button v-on:click="handleArr">push</button>
+    
+    <button v-on:click="handleAdd">add</button>
+    <!-- <div>
+      {{counter}}
+    </div> -->
+    <!-- <div>
+      {{doubleCounter}}
+    </div>
     <h2>v-bind</h2>
     <span v-bind:title="title">右键审查元素查看我的 title 属性</span>
     <h2>v-model 原理</h2>
     <div>
       <input type="text" v-model="inputVal" />
-      <div>{{ inputVal }}</div>
+      <div>{{ inputVal }}  </div>
     </div>
     <div>
       <input type="checkbox" v-model="isChecked" />
@@ -49,16 +58,16 @@
         <option value="3">3</option>
       </select>
       <div>{{ selectValue }}</div>
-    </div>
-    <h2>组件 原理</h2>
-    <comp></comp>
-    <h2>插槽 原理</h2>
-    <scope-slot></scope-slot>
-    <scope-slot>
+    </div> -->
+    <!-- <h2>组件 原理</h2>
+    <comp></comp> -->
+    <!-- <h2>插槽 原理</h2> -->
+    <!-- <scope-slot></scope-slot> -->
+    <!-- <scope-slot>
       <template v-slot:default="scopeSlot">
         <div>{{ scopeSlot }}</div>
       </template>
-    </scope-slot>
+    </scope-slot> -->
   </div>
   <script type="module">
     import Vue from "./src/index.js";
@@ -124,7 +133,7 @@
           // 数组的响应式原理
           arr: [1, 2, 3],
           // 响应式更新
-          counter: 0,
+          counter: 1,
           // v-bind
           title: "看我",
           // v-model
@@ -143,10 +152,14 @@
         handleObj() {
           this.obj.aa.b = new Date().toLocaleString()
         },
+        handleArrReverse() {
+          this.arr = this.arr.reverse()
+        },
         handleArr() {
           this.arr.push(0)
         },
         handleAdd() {
+          debugger
           this.counter++;
         },
         handleMinus() {
@@ -154,6 +167,7 @@
         },
       },
     });
+
 
   </script>
 </body>

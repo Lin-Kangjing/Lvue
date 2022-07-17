@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\compliler\mountComponent.js
  * @Date: 2022-07-13 19:23:12
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-13 20:37:39
+ * @LastEditTime: 2022-07-16 20:13:05
  * @author: Lin_kangjing
  */
 import Vue from '../index.js'
@@ -11,6 +11,7 @@ import Watcher from '../watcher.js'
 export default function mountComponent(vm){
   // 更新组件的函数
   const updateComponent =()=>{
+    // console.log(vm._render())
     vm._update(vm._render())
   }
   // 实例化一个渲染watcher（一个组件只有一个渲染watcher）,当响应式数据更新时，这个更新函数会被机智
@@ -36,7 +37,8 @@ Vue.prototype._update = function(vnode){
     this.$el = this.__patch__(this.$el,vnode)
   }else{
     // 后续更新组件或，走这里
-    this.$el = this.__patch__(prevVNdoe
+    // debugger
+    this.$el = this.__patch__(prevVNode
       ,vnode)
   }
 }

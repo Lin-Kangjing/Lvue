@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\compliler\complileToFunction.js
  * @Date: 2022-07-09 21:50:06
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-11 19:43:25
+ * @LastEditTime: 2022-07-16 19:12:33
  * @author: Lin_kangjing
  */
 import parse from './parse.js'
@@ -15,6 +15,8 @@ import generate from './generate.js'
  */
 export default function complileToFunction(template) {
   const ast = parse(template)
+  // console.log(ast)
   const render = generate(ast)
+  // console.log(render)
   return render
 }

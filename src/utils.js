@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\utils.js
  * @Date: 2022-07-05 19:56:04
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-13 19:14:10
+ * @LastEditTime: 2022-07-16 12:17:54
  * @author: Lin_kangjing
  */
 /**
@@ -40,6 +40,6 @@ export function isUnaryTag(tagName){
  * @author: Lin_kangjing
  */
 export function isReserveTag(tagName){
-  const reserveTag  = ['div', 'h3', 'span', 'input', 'select', 'option', 'p', 'button', 'template']
+  const reserveTag  = ['div', 'h3','h2','h1', 'span', 'input', 'select', 'option', 'p', 'button', 'template']
   return reserveTag.includes(tagName)
 }

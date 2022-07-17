@@ -1,4 +1,4 @@
-import {isUnaryTag} from '../utils.js'
+import { isUnaryTag } from "../utils.js";
 /**解析模板字符串，生成ast语法树
  * @param {*} template
  * @return {*} ast语法树
@@ -65,7 +65,7 @@ export default function parse(template) {
       attrsStr = content.slice(firstSpaceIdx + 1);
     }
     // attrs属性组 [id="app"]
-    const attrs =attrsStr? attrsStr.split(" ") : [];
+    const attrs = attrsStr ? attrsStr.split(" ") : [];
     // 解析attrs数组生成map对象
     const attrMap = parseAttrs(attrs);
     // 生成ast对象
@@ -133,10 +133,31 @@ export default function parse(template) {
       // 处理v-on指令
       processVOn(curEle, RegExp.$1, rawAttr[`v-on:${RegExp.$1}`]);
     }
+    // 处理插槽内容
+    processSlotContent(curEle);
+
     // 节点处理完毕以后让其和父节点关联
     if (stackLen) {
       stack[stackLen - 1].children.push(curEle);
       curEle.parent = stack[stackLen - 1];
+
+      // 如果节点存在slotName,则说明节点是组件传递给插槽的内容
+      if (curEle.slotName) {
+        const {parent, slotName, scopeSlot, children } = curEle;
+        const slotInfo = {
+          slotName,
+          scopeSlot,
+          children: children.map((item) => {
+            delete item.parent;
+            return item;
+          }),
+        };
+        if (parent.rawAttr.scopedSlots) {
+          parent.rawAttr.scopedSlots[curEle.slotName] = slotInfo;
+        } else {
+          paren.rawAttr.scopedSlots = { [curEle.slotName]: slotInfo }
+        }
+      }
     }
   }
 }
@@ -150,7 +171,7 @@ function parseAttrs(attrs) {
   for (let i = 0; i < attrs.length; i++) {
     const attr = attrs[i];
     const [attrName, attrValue] = attr.split("=");
-    attrMap[attrName] = attrValue.replace(/"/g, '')
+    attrMap[attrName] = attrValue.replace(/"/g, "");
   }
   return attrMap;
 }
@@ -177,23 +198,23 @@ function generateAST(tagName, attrMap) {
  * @return {*}
  * @author: Lin_kangjing
  */
-function processVModel (curEle ) {
-  const {tag,rawAttr,attr} = curEle
-  const {type,'v-model':vModelVal} = curEle
-  if(tag==='input') {
-    if(/text/.test(type)){
+function processVModel(curEle) {
+  const { tag, rawAttr, attr } = curEle;
+  const { type, "v-model": vModelVal } = curEle;
+  if (tag === "input") {
+    if (/text/.test(type)) {
       // <input type="text" v-model="value" />
-      attr.vModel= {tag,type:'text',value:vModelVal};
-    }else if(/checkbox/.test(type)){
+      attr.vModel = { tag, type: "text", value: vModelVal };
+    } else if (/checkbox/.test(type)) {
       // <input type="checkbox" v-model="value" />
-      attr.vModel = {tag,type:'checkbox',value:vModelVal};
+      attr.vModel = { tag, type: "checkbox", value: vModelVal };
     }
-  }else if(tag==='textarea'){
+  } else if (tag === "textarea") {
     // <textarea v-model="value" />
-    attr.vModel = {tag,value:vModelVal};
-  }else if(tag==='select'){
-     // <select v-model="selectedValue">...</select>
-    attr.vModel = {tag,value:vModelVal}
+    attr.vModel = { tag, value: vModelVal };
+  } else if (tag === "select") {
+    // <select v-model="selectedValue">...</select>
+    attr.vModel = { tag, value: vModelVal };
   }
 }
 /**处理v-bind指令
@@ -203,17 +224,40 @@ function processVModel (curEle ) {
  * @return {*}
  * @author: Lin_kangjing
  */
-function processVBind (curEle,bindKey,bindVal) {
-  curEle.attr.vBind = {[bindKey]:bindVal};
+function processVBind(curEle, bindKey, bindVal) {
+  curEle.attr.vBind = { [bindKey]: bindVal };
 }
-/**处理v-on指令 
+/**处理v-on指令
  * @param {*} curEle
  * @param {*} vOnKey
  * @param {*} vOnVal
  * @return {*}
  * @author: Lin_kangjing
  */
-function processVOn (curEle,vOnKey,vOnVal) {
-  curEle.attr.vOn = {[vOnKey]:vOnVal}
+function processVOn(curEle, vOnKey, vOnVal) {
+  curEle.attr.vOn = { [vOnKey]: vOnVal };
 }
-
+/**处理插槽
+ * <scope-slot>
+ *   <template v-slot:default="scopeSlot">
+ *     <div>{{ scopeSlot }}</div>
+ *   </template>
+ * </scope-slot>
+ * @param {*} elAst
+ * @return {*}
+ * @author: Lin_kangjing
+ */
+function processSlotContent(elAst) {
+  // 具有v-slot:xx属性的template只能是组件的根元素，这里不做判断
+  if (elAst.tag === "template") {
+    const attrMap = elAst.rawAttr;
+    for (const key of attrMap) {
+      if (key.match(/v-slot:(.*)/)) {
+        // 说明template上有v-slot标签
+        const slotName = (elAst.slotName = RegExp.$1);
+        elAst.scopeSlot = attrMap[`v-slot:${slotName}`];
+        return;
+      }
+    }
+  }
+}
