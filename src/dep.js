@@ -3,7 +3,7 @@
  * @FilePath: \lvue\src\dep.js
  * @Date: 2022-07-09 10:25:25
  * @LastEditors: Lin_kangjing
- * @LastEditTime: 2022-07-17 01:50:01
+ * @LastEditTime: 2022-07-18 20:33:04
  * @author: Lin_kangjing
  */
 // 存储所有的Dep.target
@@ -29,6 +29,7 @@ export function popTarget(){
   targetStack.pop()
   Dep.target  = targetStack[targetStack.length - 1]
 }
+// 实质上computed watcher中的依赖收集并没有写在这里面
 /**vue1 中的key和dep是一一对应关系，举例说明:
  * new Vue({
  *  data(){
